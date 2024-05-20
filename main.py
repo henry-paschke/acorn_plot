@@ -5,20 +5,25 @@ import glob
 
 input_files = []
 
-output_modes = ["excel", "print"]
+output_modes = ["excel", "print", "png_nodes", "png_edges"]
 output_mode = "print" 
+output_dir = ""
 
 def print_output(path: str) -> None:
-    #JJ magic here 
-    print(f"-------------- {path} --------------")
+    print(f"-------------- {path} --------------\n")
     read.print_from_csv(path)
     print("\n")
     
+def save_to_png(path: str, edges: bool) -> None:
+    base_name = os.path.basename(path)
+    file_name = output_dir + os.path.splitext(base_name)[0] + ".png"
+    # JJ magic
+    print(f"Saved {path} to image file {file_name}")
 
 def save_to_excel(path: str) -> None:
     base_name = os.path.basename(path)
-    file_name = os.path.splitext(base_name)[0] + ".xlsx"
-    #JJ magic here 
+    file_name = output_dir + os.path.splitext(base_name)[0] + ".xlsx"
+    print(f"Saved {path} to excel file {file_name}")
     read.csv_to_excel(path, file_name)
 
 def parse_arguments(args: "list[str]") -> "list[str]":
@@ -26,13 +31,12 @@ def parse_arguments(args: "list[str]") -> "list[str]":
     next_arg_skipped = False
     for i in range(len(args)):
         if next_arg_skipped:
+            next_arg_skipped = False
             continue
         argument = args[i]
         if argument.startswith("--"):
             if i + i > len(args):
                 raise Exception(f"Option {argument} must be followed by an argument.")
-            elif not os.path.exists(args[i+1]):
-                raise Exception(f"Path {args[i+1]} does not exist.")
             else:
                 next_arg_skipped = True
                 parsed_args.append([argument, args[i + 1]])
@@ -41,10 +45,11 @@ def parse_arguments(args: "list[str]") -> "list[str]":
                 raise Exception(f"Path {argument} does not exist.")
             else:
                 parsed_args.append(argument)
+        
     return parsed_args
 
-def execute_command(command: str, path: str):
-    global input_files
+def execute_command(command: str, path: str) -> None:
+    global input_files, output_mode
     if command == "--dir":
         csv_files = glob.glob(os.path.join(path, "*.csv"))
         input_files += csv_files
@@ -52,7 +57,6 @@ def execute_command(command: str, path: str):
         input_files.append(path)
     elif command == "--output":
         if path in output_modes:
-            global output_mode
             output_mode = path
         else:
             raise Exception(f"--output must be followed by one of the following: {output_modes}")
@@ -72,6 +76,8 @@ def process_input_files():
             print_output(file)
         elif output_mode == "excel":
             save_to_excel(file)
+        elif output_mode == "png":
+            save_to_png(file)
 
 def print_help():
     print("""
@@ -82,8 +88,9 @@ Arguments:
     --output <output_mode>  choose between printed and excel output
     --help                  see this page again
           """)
-    
+
 
 command_list = parse_arguments(sys.argv[1:])
+print(command_list)
 run_command_list(command_list)
 process_input_files()
