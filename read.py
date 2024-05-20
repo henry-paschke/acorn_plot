@@ -13,7 +13,13 @@ def csv_to_excel(input_name, output_name):
     convert_frame(input_name).to_excel(output_name)
 
 def plot_csv(input_name):
-    pass
+    figure, axes = plt.subplots(1, 1)
+    axes.plot()
+    plt.show()
+
+# Print a given dataframe from the csv file
+def print_from_csv(input_name):
+    print(convert_frame(input_name))
 
 # Return a new dataframe with columns "WALL_TIME and GPU_TIME"
 def convert_frame(input_name):
@@ -38,4 +44,5 @@ def convert_frame(input_name):
     data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
     return pd.DataFrame(data)
 
-csv_to_excel("csv/results_final.csv", "excel/results_final.xlsx")
+#csv_to_excel("csv/results_final.csv", "excel/results_final.xlsx")
+plot_csv("csv/results_final.csv")

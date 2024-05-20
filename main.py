@@ -1,4 +1,4 @@
-#import read
+import read
 import sys
 import os
 import glob
@@ -9,16 +9,17 @@ output_modes = ["excel", "print"]
 output_mode = "print" 
 
 def print_output(path: str) -> None:
-    print(f"output {path}")
     #JJ magic here 
-    pass
+    print(f"-------------- {path} --------------")
+    read.print_from_csv(path)
+    print("\n")
+    
 
 def save_to_excel(path: str) -> None:
     base_name = os.path.basename(path)
     file_name = os.path.splitext(base_name)[0] + ".xlsx"
-    print(f"excel {path}: saved to {file_name}")
     #JJ magic here 
-    pass
+    read.csv_to_excel(path, file_name)
 
 def parse_arguments(args: "list[str]") -> "list[str]":
     parsed_args = []
