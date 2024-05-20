@@ -13,33 +13,31 @@ def csv_to_excel(input_name, output_name):
     convert_frame(input_name).to_excel(output_name)
 
 # Plot a given csv file to an output file
-def plot_num_nodes(input_name, output_name):
+def plot_points(input_name, output_name):
 
     #Fetch the dataframe
     dataframe = pd.read_csv(input_name)
-    figure, axes = plt.subplots()
-    axes.scatter(dataframe["num_nodes"], dataframe["total_event"])
-    axes.scatter(dataframe["num_nodes"], dataframe["total_event"])
+    figure, axes = plt.subplots(1,2)
 
-    axes.set_xlabel("Number of nodes")
-    axes.set_ylabel("Total time (s)")
+    # Declare axis labels
+    axes[0].set_xlabel("Number of nodes")
+    axes[0].set_ylabel("Total time (s)")
+    # Plot the total number of nodes (x) vs the total events (y)
+    axes[0].scatter(dataframe["num_nodes"], dataframe["total_event"])
+    # Calculate and plot the line of best fit
+    line_of_best_fit = stats.linregress(dataframe["num_nodes"], dataframe["total_event"])
+    axes[0].plot(dataframe["num_nodes"], line_of_best_fit.slope * dataframe["num_nodes"] + line_of_best_fit.intercept,c='orange')
 
-    axes.plot()
-    plt.savefig(output_name)
+    # Declare axis labels
+    axes[1].set_xlabel("Number of edges")
+    axes[1].set_ylabel("Total time (s)")
+    # Plot the total number of edges (x) vs the total events (y)
+    axes[1].scatter(dataframe["7_num_edges_bg"], dataframe["total_event"])
+    # Calculate and plot the line of best fit
+    line_of_best_fit = stats.linregress(dataframe["7_num_edges_bg"], dataframe["total_event"])
+    axes[1].plot(dataframe["7_num_edges_bg"], line_of_best_fit.slope * dataframe["7_num_edges_bg"] + line_of_best_fit.intercept,c='orange')
 
-# Plot a given csv file to an output file
-def plot_num_edges(input_name, output_name):
-
-    #Fetch the dataframe
-    dataframe = pd.read_csv(input_name)
-    figure, axes = plt.subplots()
-    axes.scatter(dataframe["num_edges"], dataframe["total_event"])
-    axes.scatter(dataframe["num_edges"], dataframe["total_event"])
-
-    axes.set_xlabel("Number of nodes")
-    axes.set_ylabel("Total time (s)")
-
-    axes.plot()
+    # Plot and save the figure
     plt.savefig(output_name)
 
 
@@ -72,4 +70,5 @@ def convert_frame(input_name):
 
 #print_from_csv("csv/results_final.csv")
 #csv_to_excel("csv/results_final.csv", "excel/results_final.xlsx")
-plot_csv("csv/results_final.csv", "png/results_final")
+plot_points("csv/results_final.csv", "png/results_final")
+
