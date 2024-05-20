@@ -8,5 +8,16 @@ import pprint
 from scipy import stats
 #matplotlib.matplotlib_fname()
 
+"""
+    GPU_TIME    WALL_TIME
+METRIC 0.09         0.09
+EVAL
+BASH
+
+"""
+
+MEAN_COLUMN_INDEX = -2
+
 dataframe = pd.read_csv("csv/results_final.csv")
-print(dataframe)
+dataframe = dataframe.set_index("event_id")
+print(dataframe.loc["mean"])
