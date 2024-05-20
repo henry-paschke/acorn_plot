@@ -27,6 +27,21 @@ def plot_num_nodes(input_name, output_name):
     axes.plot()
     plt.savefig(output_name)
 
+# Plot a given csv file to an output file
+def plot_num_edges(input_name, output_name):
+
+    #Fetch the dataframe
+    dataframe = pd.read_csv(input_name)
+    figure, axes = plt.subplots()
+    axes.scatter(dataframe["num_edges"], dataframe["total_event"])
+    axes.scatter(dataframe["num_edges"], dataframe["total_event"])
+
+    axes.set_xlabel("Number of nodes")
+    axes.set_ylabel("Total time (s)")
+
+    axes.plot()
+    plt.savefig(output_name)
+
 
 # Print a given dataframe from the csv file
 def print_from_csv(input_name):
