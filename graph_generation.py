@@ -70,8 +70,8 @@ def convert_frame(input_name):
     elif "mm" in input_name:
         labels = ["Module Map", "Preprocess","InteractionGNN", "ccInfer", "Total"]
     else:
-        print("Error: Invalid Path Name ...")
-        exit(1)
+        raise Exception(f"Error: Invalid Path Name {input_name}. Must contain mm or ml to differentiate.")
+
     wall_time = []
     gpu_time = []
 
