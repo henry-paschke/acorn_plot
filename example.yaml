@@ -1,6 +1,6 @@
 file:
-  - csv/results_final copy 2.csv
-  - csv/results_final.csv
+  - csv/results_final_1.csv
+  - csv/results_final_2.csv
 
 dir:
   - csv/
