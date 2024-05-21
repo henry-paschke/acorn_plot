@@ -1,12 +1,7 @@
 #Importing libraries 
-import glob
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-#import seaborn as sns
-import pprint
 from scipy import stats
-#matplotlib.matplotlib_fname()
 
 # Convert a given csv file into an excel file with columns "WALL_TIME and GPU_TIME"
 def csv_to_excel(input_name, output_name):
@@ -58,6 +53,7 @@ def convert_frame(input_name):
     wall_time = []
     gpu_time = []
 
+    # Add the mean value time to the correct list (wall_time or gpu_time)
     for name, value in mean_series.items():
         if name.endswith("gpu_time"):
             gpu_time.append(f"{str(round(value, 4))} \u00B1 {str(round(std_series[name],4))}")
@@ -67,8 +63,4 @@ def convert_frame(input_name):
     # Construct the new dataframe
     data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
     return pd.DataFrame(data)
-
-#print_from_csv("csv/results_final.csv")
-#csv_to_excel("csv/results_final.csv", "excel/results_final.xlsx")
-#plot_points("csv/results_final.csv", "png/results_final")
 
