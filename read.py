@@ -70,5 +70,5 @@ def convert_frame(input_name):
 
 #print_from_csv("csv/results_final.csv")
 #csv_to_excel("csv/results_final.csv", "excel/results_final.xlsx")
-plot_points("csv/results_final.csv", "png/results_final")
+#plot_points("csv/results_final.csv", "png/results_final")
 

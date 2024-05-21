@@ -5,7 +5,7 @@ import glob
 
 input_files = []
 
-output_modes = ["excel", "print", "png_nodes", "png_edges"]
+output_modes = ["excel", "print", "png"]
 output_mode = "print" 
 output_dir = ""
 
@@ -14,15 +14,16 @@ def print_output(path: str) -> None:
     read.print_from_csv(path)
     print("\n")
     
-def save_to_png(path: str, edges: bool) -> None:
+def save_to_png(path: str) -> None:
     base_name = os.path.basename(path)
-    file_name = output_dir + os.path.splitext(base_name)[0] + ".png"
+    file_name = output_dir + "".join(base_name.split(".")[:-1]) + ".png"
     # JJ magic
     print(f"Saved {path} to image file {file_name}")
+    read.plot_points(path, file_name)
 
 def save_to_excel(path: str) -> None:
     base_name = os.path.basename(path)
-    file_name = output_dir + os.path.splitext(base_name)[0] + ".xlsx"
+    file_name = output_dir + "".join(base_name.split(".")[:-1]) + ".xlsx"
     print(f"Saved {path} to excel file {file_name}")
     read.csv_to_excel(path, file_name)
 
@@ -49,9 +50,12 @@ def parse_arguments(args: "list[str]") -> "list[str]":
     return parsed_args
 
 def execute_command(command: str, path: str) -> None:
-    global input_files, output_mode
+    global input_files, output_mode, output_dir
     if command == "--dir":
+        if not os.path.exists(path):
+            raise Exception(f"The directory {path} does not exist.")
         csv_files = glob.glob(os.path.join(path, "*.csv"))
+        print(csv_files)
         input_files += csv_files
     elif command == "--file":
         input_files.append(path)
@@ -60,6 +64,10 @@ def execute_command(command: str, path: str) -> None:
             output_mode = path
         else:
             raise Exception(f"--output must be followed by one of the following: {output_modes}")
+    elif command == "--output-dir":
+        if not os.path.exists(path):
+            raise Exception(f"Output dir {path} does not exist")
+        output_dir = path
     elif command == "--help":
         print_help()
         
@@ -91,6 +99,5 @@ Arguments:
 
 
 command_list = parse_arguments(sys.argv[1:])
-print(command_list)
 run_command_list(command_list)
 process_input_files()
