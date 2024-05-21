@@ -49,7 +49,7 @@ def plot_edges(input_name, output_name):
     plt.tight_layout()
 
     # Plot and save the figure
-    plt.savefig(output_name, bbox_inches="tight")
+    plt.savefig(output_name)
 
 
 # Print a given dataframe from the csv file
@@ -65,7 +65,7 @@ def convert_frame(input_name):
     mean_series = dataframe.loc["mean"]
     std_series = dataframe.loc["std"]
 
-    labels = ["Metric_Learning", "Build_Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer"]
+    labels = ["Metric_Learning", "Build_Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Total"]
     wall_time = []
     gpu_time = []
 
@@ -75,8 +75,12 @@ def convert_frame(input_name):
             gpu_time.append(f"{str(round(value, 4))} \u00B1 {str(round(std_series[name],4))}")
         elif name.endswith("time"):
             wall_time.append(f"{str(round(value, 4))} \u00B1 {str(round(std_series[name],4))}")
+        elif name == "total_event":
+            wall_time.append(f"{str(round(value, 4))} \u00B1 {str(round(std_series[name],4))}")
+        elif name == "total_event_gpu":
+            gpu_time.append(f"{str(round(value, 4))} \u00B1 {str(round(std_series[name],4))}")
 
     # Construct the new dataframe
     data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
-    return pd.DataFrame(data, bbox_inches="tight")
+    return pd.DataFrame(data)
 

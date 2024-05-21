@@ -1,5 +1,5 @@
-output: png
-outdir: output/
+output: excel
+outdir: excel/
 
 dir:
   - csv/
