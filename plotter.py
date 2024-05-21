@@ -81,13 +81,13 @@ class Plotter():
 
     def set_input_dir(self, path: str):
         if not os.path.exists(path):
-            raise Exception(f"Output dir {path} does not exist")
-        print(path)
+            raise Exception(f"Input dir {path} does not exist")
         self.input_dir = path
 
     def set_output_dir(self, path: str):
         if not os.path.exists(path):
-            raise Exception(f"Output dir {path} does not exist")
+            print(f"Creating {path} because it does not exist.")
+            os.makedirs(path)
         self.output_dir = path
 
     def set_output_mode(self, mode: str):
