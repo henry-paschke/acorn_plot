@@ -1,6 +1,6 @@
 output: excel
 outdir: excel/
 
-dir:
-  - csv/
+file:
+  csv/results_final_1_mm.csv
 

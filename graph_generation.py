@@ -65,7 +65,13 @@ def convert_frame(input_name):
     mean_series = dataframe.loc["mean"]
     std_series = dataframe.loc["std"]
 
-    labels = ["Metric_Learning", "Build_Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Total"]
+    if "ml" in input_name:
+        labels = ["Metric Learning", "Build Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Total"]
+    elif "mm" in input_name:
+        labels = ["Module Map", "Preprocess","InteractionGNN", "ccInfer", "Total"]
+    else:
+        print("Error: Invalid Path Name ...")
+        exit(1)
     wall_time = []
     gpu_time = []
 
