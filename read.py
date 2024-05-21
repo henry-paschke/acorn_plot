@@ -53,6 +53,7 @@ def convert_frame(input_name):
     wall_time = []
     gpu_time = []
 
+    # Add the mean value time to the correct list (wall_time or gpu_time)
     for name, value in mean_series.items():
         if name.endswith("gpu_time"):
             gpu_time.append(f"{str(round(value, 4))} \u00B1 {str(round(std_series[name],4))}")
