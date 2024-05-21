@@ -157,9 +157,15 @@ class Plotter():
     """
     def save_to_png(self, path: str) -> None:
         base_name = os.path.basename(path)
-        file_name = self.output_dir + "".join(base_name.split(".")[:-1]) + ".png"
-        print(f"Saved {path} to image file {file_name}")
-        graph_generation.plot_points(path, file_name)
+        file_name = self.output_dir + "".join(base_name.split(".")[:-1])
+
+        points_name =  file_name + "_points.png"
+        print(f"Saved {path} to image file {points_name}")
+        graph_generation.plot_points(path, points_name)
+
+        edges_name =  file_name + "_edges.png"
+        print(f"Saved {path} to image file {edges_name}")
+        graph_generation.plot_edges(path, edges_name)
 
     """
     Saves the graph of one given csv to an excel file

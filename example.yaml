@@ -1,8 +1,6 @@
 output: png
 outdir: output/
-indir: csv/
 
-file:
-  - results_final copy 2.csv
-  - results_final.csv
+dir:
+  - csv/
 

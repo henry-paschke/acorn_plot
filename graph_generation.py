@@ -12,28 +12,44 @@ def plot_points(input_name, output_name):
 
     #Fetch the dataframe
     dataframe = pd.read_csv(input_name)
-    figure, axes = plt.subplots(1,2)
+    figure, axes = plt.subplots(figsize=(6,6))
 
     # Declare axis labels
-    axes[0].set_xlabel("Number of nodes")
-    axes[0].set_ylabel("Total time (s)")
+    axes.set_xlabel("Number of nodes")
+    axes.set_ylabel("Total time (s)")
+
     # Plot the total number of nodes (x) vs the total events (y)
-    axes[0].scatter(dataframe["num_nodes"], dataframe["total_event"])
+    axes.scatter(dataframe["num_nodes"], dataframe["total_event"], alpha=0.3)
     # Calculate and plot the line of best fit
     line_of_best_fit = stats.linregress(dataframe["num_nodes"], dataframe["total_event"])
-    axes[0].plot(dataframe["num_nodes"], line_of_best_fit.slope * dataframe["num_nodes"] + line_of_best_fit.intercept,c='orange')
+    axes.plot(dataframe["num_nodes"], line_of_best_fit.slope * dataframe["num_nodes"] + line_of_best_fit.intercept,c='orange')
 
-    # Declare axis labels
-    axes[1].set_xlabel("Number of edges")
-    axes[1].set_ylabel("Total time (s)")
-    # Plot the total number of edges (x) vs the total events (y)
-    axes[1].scatter(dataframe["7_num_edges_bg"], dataframe["total_event"])
-    # Calculate and plot the line of best fit
-    line_of_best_fit = stats.linregress(dataframe["7_num_edges_bg"], dataframe["total_event"])
-    axes[1].plot(dataframe["7_num_edges_bg"], line_of_best_fit.slope * dataframe["7_num_edges_bg"] + line_of_best_fit.intercept,c='orange')
+    plt.xticks(rotation = 45)
+    plt.tight_layout()
 
     # Plot and save the figure
     plt.savefig(output_name)
+
+def plot_edges(input_name, output_name):
+    #Fetch the dataframe
+    dataframe = pd.read_csv(input_name)
+    figure, axes = plt.subplots(figsize=(6,6))
+
+    # Declare axis labels
+    axes.set_xlabel("Number of edges")
+    axes.set_ylabel("Total time (s)")
+
+    # Plot the total number of edges (x) vs the total events (y)
+    axes.scatter(dataframe["7_num_edges_bg"], dataframe["total_event"], alpha=0.3)
+    # Calculate and plot the line of best fit
+    line_of_best_fit = stats.linregress(dataframe["7_num_edges_bg"], dataframe["total_event"])
+    axes.plot(dataframe["7_num_edges_bg"], line_of_best_fit.slope * dataframe["7_num_edges_bg"] + line_of_best_fit.intercept,c='orange')
+
+    plt.xticks(rotation = 45)
+    plt.tight_layout()
+
+    # Plot and save the figure
+    plt.savefig(output_name, bbox_inches="tight")
 
 
 # Print a given dataframe from the csv file
@@ -62,5 +78,5 @@ def convert_frame(input_name):
 
     # Construct the new dataframe
     data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
-    return pd.DataFrame(data)
+    return pd.DataFrame(data, bbox_inches="tight")
 
