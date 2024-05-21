@@ -95,7 +95,8 @@ class Plotter():
         path = self.input_dir + path
         if not os.path.exists(path):
             raise Exception(f"File {path} does not exist")
-        self.input_files.append(path)
+        if path not in self.input_files:
+            self.input_files.append(path)
 
     """
     Sets the input directory for all future file additions.
