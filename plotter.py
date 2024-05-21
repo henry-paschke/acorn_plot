@@ -196,7 +196,7 @@ class Plotter():
         self.input_files.clear()
 
     """
-    Processes all the queues
+    Processes all the queues.
     """
     def process(self):
         self.run_command_queue()
