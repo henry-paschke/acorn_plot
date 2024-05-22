@@ -186,7 +186,12 @@ class Plotter():
             if isinstance(entry, list):
                 self.execute_command(entry[0], entry[1])
             else:
-                self.execute_command("--file", entry)
+                if entry.endswith(".csv"):
+                    self.execute_command("--file", entry)
+                elif entry.endswith(".yaml"):
+                    self.execute_command("--yaml", entry)
+                else:
+                    raise Exception(f"Cannot infer an action for file {entry}")
         self.command_list.clear()
 
     """

@@ -1,6 +1,0 @@
-output: excel
-outdir: excel/
-
-file:
-  csv/results_final_1_mm.csv
-
