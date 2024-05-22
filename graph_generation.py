@@ -10,8 +10,15 @@ def csv_to_excel(input_name, output_name):
 # Plot a given csv file to an output file
 def plot_points(input_name, output_name):
 
+    drop_labels = ["mean", "std"]
+
     #Fetch the dataframe
     dataframe = pd.read_csv(input_name)
+
+    dataframe = dataframe.set_index("event_id")
+    for drop_label in drop_labels:
+        dataframe.drop(drop_label, inplace=True)
+ 
     figure, axes = plt.subplots(figsize=(6,6))
 
     # Declare axis labels
