@@ -161,11 +161,11 @@ class Plotter():
 
         points_name =  file_name + "_points.png"
         print(f"Saved {path} to image file {points_name}")
-        graph_generation.plot_points(path, points_name)
+        graph_generation.plot_points(path, points_name, "num_nodes", "total_event", "Number of nodes", "Total time (s)")
 
         edges_name =  file_name + "_edges.png"
         print(f"Saved {path} to image file {edges_name}")
-        graph_generation.plot_edges(path, edges_name)
+        graph_generation.plot_points(path, edges_name, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)")
 
     """
     Saves the graph of one given csv to an excel file

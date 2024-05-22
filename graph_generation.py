@@ -8,7 +8,7 @@ def csv_to_excel(input_name, output_name):
     convert_frame(input_name).to_excel(output_name)
 
 # Plot a given csv file to an output file
-def plot_points(input_name, output_name, x, y):
+def plot_points(input_name, output_name, x, y, x_label = "", y_label = ""):
 
     # Rows to drop from the dataframe
     drop_labels = ["mean", "std"]
@@ -16,6 +16,7 @@ def plot_points(input_name, output_name, x, y):
     #Fetch the dataframe
     dataframe = pd.read_csv(input_name)
 
+    # Drop the desired rows using the list as reference
     dataframe = dataframe.set_index("event_id")
     for drop_label in drop_labels:
         dataframe.drop(drop_label, inplace=True)
@@ -23,8 +24,8 @@ def plot_points(input_name, output_name, x, y):
     figure, axes = plt.subplots(figsize=(6,6))
 
     # Declare axis labels
-    axes.set_xlabel("Number of nodes")
-    axes.set_ylabel("Total time (s)")
+    axes.set_xlabel(x_label)
+    axes.set_ylabel(y_label)
 
     # Plot the total number of nodes (x) vs the total events (y)
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
