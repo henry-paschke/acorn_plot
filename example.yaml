@@ -1,0 +1,6 @@
+output: png
+outdir: output/
+
+file:
+  csv/results_final_1_ml.csv
+
