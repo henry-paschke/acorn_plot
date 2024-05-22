@@ -61,7 +61,6 @@ def convert_frame(input_name):
 
     wall_time = []
     gpu_time = []
-    total_time = []
 
     # Add the mean value time to the correct list (wall_time or gpu_time) as a list of two numbers, so we can still do math on them
     for name, value in mean_series.items():
@@ -70,15 +69,12 @@ def convert_frame(input_name):
         elif name.endswith("time") or name == "total_event":
             wall_time.append([value, std_series[name]])
 
-    for wall_time_entry, gpu_time_entry in zip(wall_time, gpu_time):
-        total_time.append([wall_time_entry[0] + gpu_time_entry[0], wall_time_entry[1] + gpu_time_entry[1]])
-
-    # change the format from two numbers to a formatted string
-    for list in [wall_time, gpu_time, total_time]:
+    # Change the format from two numbers to a formatted string
+    for list in [wall_time, gpu_time]:
         for i in range(len(list)):
             list[i] = f"{str(round(list[i][0], 4))} \u00B1 {str(round(list[i][1],4))}"
 
     # Construct the new dataframe
-    data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time, "Total_Time": total_time}
+    data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
     return pd.DataFrame(data)
 
