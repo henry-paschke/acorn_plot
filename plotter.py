@@ -7,10 +7,10 @@ class Plotter():
     """
     A graph plotting command system for command line interface or direct use in a script.
     """
-    output_modes = ["excel", "print", "png"]
+    availible_output_modes = ["excel", "print", "png"]
 
     def __init__(self):
-        self.output_mode = "print" 
+        self.output_modes = []
         self.output_dir = ""
         self.input_dir = ""
         self.input_files = []
@@ -122,10 +122,10 @@ class Plotter():
         - excel
     """
     def set_output_mode(self, mode: str):
-        if mode in self.output_modes:
-            self.output_mode = mode
+        if mode in self.availible_output_modes:
+            self.output_modes.append(mode)
         else:
-            raise Exception(f"--output must be followed by one of the following: {self.output_modes}")
+            raise Exception(f"--output must be followed by one of the following: {self.availible_output_modes}")
 
     """
     Prints the command line help output.
@@ -198,13 +198,16 @@ class Plotter():
     Processes all the files in the file queue according to the current output mode
     """
     def process_file_queue(self):
+        if len(self.output_modes) == 0:
+            self.output_modes.append("print")
         for file in self.input_files:
-            if self.output_mode == "print":
-                self.print_output(file)
-            elif self.output_mode == "excel":
-                self.save_to_excel(file)
-            elif self.output_mode == "png":
-                self.save_to_png(file)
+            for mode in self.output_modes:
+                if mode == "print":
+                    self.print_output(file)
+                elif mode == "excel":
+                    self.save_to_excel(file)
+                elif mode == "png":
+                    self.save_to_png(file)
         self.input_files.clear()
 
     """

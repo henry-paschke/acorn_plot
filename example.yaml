@@ -1,4 +1,7 @@
-output: png
+output: 
+  - png
+  - excel
+  - print
 outdir: output/
 
 file:
