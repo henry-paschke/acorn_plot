@@ -8,7 +8,7 @@ def csv_to_excel(input_name, output_name):
     convert_frame(input_name).to_excel(output_name)
 
 # Plot a given csv file to an output file
-def plot_points(input_name, output_name):
+def plot_points(input_name, output_name, x, y):
 
     # Rows to drop from the dataframe
     drop_labels = ["mean", "std"]
@@ -27,46 +27,16 @@ def plot_points(input_name, output_name):
     axes.set_ylabel("Total time (s)")
 
     # Plot the total number of nodes (x) vs the total events (y)
-    axes.scatter(dataframe["num_nodes"], dataframe["total_event"], alpha=0.3)
+    axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
     # Calculate and plot the line of best fit
-    line_of_best_fit = stats.linregress(dataframe["num_nodes"], dataframe["total_event"])
-    axes.plot(dataframe["num_nodes"], line_of_best_fit.slope * dataframe["num_nodes"] + line_of_best_fit.intercept,c='orange')
+    line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
+    axes.plot(dataframe[x], line_of_best_fit.slope * dataframe[x] + line_of_best_fit.intercept,c='orange')
 
     plt.xticks(rotation = 45)
     plt.tight_layout()
 
     # Plot and save the figure
     plt.savefig(output_name)
-
-def plot_edges(input_name, output_name):
-    # Rows to drop from the dataframe
-    drop_labels = ["mean", "std"]
-
-    #Fetch the dataframe
-    dataframe = pd.read_csv(input_name)
-
-    dataframe = dataframe.set_index("event_id")
-    for drop_label in drop_labels:
-        dataframe.drop(drop_label, inplace=True)
-        
-    figure, axes = plt.subplots(figsize=(6,6))
-
-    # Declare axis labels
-    axes.set_xlabel("Number of edges")
-    axes.set_ylabel("Total time (s)")
-
-    # Plot the total number of edges (x) vs the total events (y)
-    axes.scatter(dataframe["7_num_edges_bg"], dataframe["total_event"], alpha=0.3)
-    # Calculate and plot the line of best fit
-    line_of_best_fit = stats.linregress(dataframe["7_num_edges_bg"], dataframe["total_event"])
-    axes.plot(dataframe["7_num_edges_bg"], line_of_best_fit.slope * dataframe["7_num_edges_bg"] + line_of_best_fit.intercept,c='orange')
-
-    plt.xticks(rotation = 45)
-    plt.tight_layout()
-
-    # Plot and save the figure
-    plt.savefig(output_name)
-
 
 # Print a given dataframe from the csv file
 def print_from_csv(input_name):
