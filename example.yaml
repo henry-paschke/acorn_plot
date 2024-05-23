@@ -1,9 +1,8 @@
 output: 
   - png
-  - excel
-  - print
+  
 outdir: output/
 
 file:
-  csv/05_22_2024_cast&torch_ml.csv
+  csv/05_22_2024_base_ml.csv
 
