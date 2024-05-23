@@ -53,15 +53,14 @@ def convert_frame(input_name):
     std_series = dataframe.loc["std"]
 
     if "ml" in input_name:
-        labels = ["Metric Learning", "Build Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Total"]
+        labels = ["Metric Learning", "Build Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Total", "Calculated Total"]
     elif "mm" in input_name:
-        labels = ["Module Map", "Preprocess","InteractionGNN", "ccInfer", "Total"]
+        labels = ["Module Map", "Preprocess","InteractionGNN", "ccInfer", "Total", "Calculated Total"]
     else:
         raise Exception(f"Error: Invalid Path Name {input_name}. Must contain mm or ml to differentiate.")
 
     wall_time = []
     gpu_time = []
-    total_time = []
 
     # Add the mean value time to the correct list (wall_time or gpu_time) as a list of two numbers, so we can still do math on them
     for name, value in mean_series.items():
@@ -70,15 +69,20 @@ def convert_frame(input_name):
         elif name.endswith("time") or name == "total_event":
             wall_time.append([value, std_series[name]])
 
-    for wall_time_entry, gpu_time_entry in zip(wall_time, gpu_time):
-        total_time.append([wall_time_entry[0] + gpu_time_entry[0], wall_time_entry[1] + gpu_time_entry[1]])
+    wall_total = sum([entry[0] for entry in wall_time[:-1]])
+    wall_std_total = sum([entry[1] for entry in wall_time[:-1]])
+    gpu_total = sum([entry[0] for entry in gpu_time[:-1]])
+    gpu_std_total = sum([entry[1] for entry in gpu_time[:-1]])
+
+    gpu_time.append([gpu_total, gpu_std_total])
+    wall_time.append([wall_total, wall_std_total])
 
     # change the format from two numbers to a formatted string
-    for list in [wall_time, gpu_time, total_time]:
+    for list in [wall_time, gpu_time]:
         for i in range(len(list)):
             list[i] = f"{str(round(list[i][0], 4))} \u00B1 {str(round(list[i][1],4))}"
 
     # Construct the new dataframe
-    data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time, "Total_Time": total_time}
+    data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
     return pd.DataFrame(data)
 
