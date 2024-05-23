@@ -69,15 +69,7 @@ def convert_frame(input_name):
         elif name.endswith("time") or name == "total_event":
             wall_time.append([value, std_series[name]])
 
-    wall_total = sum([entry[0] for entry in wall_time[:-1]])
-    wall_std_total = sum([entry[1] for entry in wall_time[:-1]])
-    gpu_total = sum([entry[0] for entry in gpu_time[:-1]])
-    gpu_std_total = sum([entry[1] for entry in gpu_time[:-1]])
-
-    gpu_time.append([gpu_total, gpu_std_total])
-    wall_time.append([wall_total, wall_std_total])
-
-    # change the format from two numbers to a formatted string
+    # Change the format from two numbers to a formatted string
     for list in [wall_time, gpu_time]:
         for i in range(len(list)):
             list[i] = f"{str(round(list[i][0], 4))} \u00B1 {str(round(list[i][1],4))}"
