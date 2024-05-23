@@ -1,8 +1,7 @@
 output: 
-  - png
+  - excel
   
 outdir: output/
 
-file:
-  csv/05_22_2024_base_ml.csv
+dir: csv/
 
