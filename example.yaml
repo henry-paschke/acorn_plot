@@ -4,5 +4,5 @@ output:
 outdir: excel/
 
 file:
-  - csv/05_28_100gpu_base_169k_ml.csv
+  - csv/05_28_10cpu_base_169k_ml.csv
 

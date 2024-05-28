@@ -69,6 +69,7 @@ def convert_frame(input_name):
         elif name.endswith("time") or name == "total_event":
             wall_time.append([value, std_series[name]])
 
+    # Calculate the sums of all rows
     wall_time.append([sum([entry[0] for entry in wall_time[:-1]]), sum([entry[1] for entry in wall_time[:-1]])])
     gpu_time.append([sum([entry[0] for entry in gpu_time[:-1]]), sum([entry[1] for entry in gpu_time[:-1]])])
 
@@ -78,6 +79,10 @@ def convert_frame(input_name):
             list[i] = f"{str(round(list[i][0], 4))} \u00B1 {str(round(list[i][1],4))}"
 
     # Construct the new dataframe
-    data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
+    if not "cpu" in input_name:
+        data = {'':labels, "Wall_Time": wall_time, "GPU_Time": gpu_time}
+    else:
+        data = {'':labels, "Wall_Time": wall_time}
+ 
     return pd.DataFrame(data)
 
