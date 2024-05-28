@@ -1,7 +1,8 @@
 output: 
   - excel
   
-outdir: output/
+outdir: excel/
 
-dir: csv/
+file:
+  - csv/05_28_100gpu_base_169k_ml.csv
 

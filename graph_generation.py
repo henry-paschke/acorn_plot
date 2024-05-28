@@ -53,9 +53,9 @@ def convert_frame(input_name):
     std_series = dataframe.loc["std"]
 
     if "ml" in input_name:
-        labels = ["Metric Learning", "Build Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Total", "Calculated Total"]
+        labels = ["Metric Learning", "Build Graph", "Filtering", "Preprocess", "InteractionGNN", "ccInfer", "Mean Total", "Cumulative Total"]
     elif "mm" in input_name:
-        labels = ["Module Map", "Preprocess","InteractionGNN", "ccInfer", "Total", "Calculated Total"]
+        labels = ["Module Map", "Preprocess","InteractionGNN", "ccInfer", "Mean Total", "Cumulative Total"]
     else:
         raise Exception(f"Error: Invalid Path Name {input_name}. Must contain mm or ml to differentiate.")
 
@@ -69,8 +69,8 @@ def convert_frame(input_name):
         elif name.endswith("time") or name == "total_event":
             wall_time.append([value, std_series[name]])
 
-    wall_time.append([sum([entry[0] for entry in wall_time]), sum([entry[1] for entry in wall_time])])
-    gpu_time.append([sum([entry[0] for entry in gpu_time]), sum([entry[1] for entry in gpu_time])])
+    wall_time.append([sum([entry[0] for entry in wall_time[:-1]]), sum([entry[1] for entry in wall_time[:-1]])])
+    gpu_time.append([sum([entry[0] for entry in gpu_time[:-1]]), sum([entry[1] for entry in gpu_time[:-1]])])
 
     # Change the format from two numbers to a formatted string
     for list in [wall_time, gpu_time]:
