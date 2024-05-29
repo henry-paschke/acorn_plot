@@ -37,8 +37,8 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
     # Calculate and plot the line of best fit
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
+    axes.text(0.5, 0.95, f"Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
     axes.plot(dataframe[x], line_of_best_fit.slope * dataframe[x] + line_of_best_fit.intercept,c='orange')
-    #axes.text(1, 1, f"Slope: {line_of_best_fit.slope}", horizontalalignment='center', verticalalignment='center')
 
     plt.xticks(rotation = 45)
     plt.tight_layout()
