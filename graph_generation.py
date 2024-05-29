@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 # Convert a given csv file into an excel file with columns "WALL_TIME and GPU_TIME"
-def csv_to_excel(input_name, output_name):
+def csv_to_excel(input_name: str, output_name: str) -> None:
     convert_frame(input_name).to_excel(output_name)
 
 # Plot a given csv file to an output file
-def plot_points(input_name, output_name, x, y, x_label = "", y_label = ""):
+def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = [0,5], y_bounds: list = [0,5]) -> None:
 
     # Rows to drop from the dataframe
     drop_labels = ["mean", "std"]
@@ -27,6 +27,10 @@ def plot_points(input_name, output_name, x, y, x_label = "", y_label = ""):
     axes.set_xlabel(x_label)
     axes.set_ylabel(y_label)
 
+    # Declare axies bounds
+    axes.set_xlim(x_bounds)
+    axes.set_ylim(y_bounds)
+
     # Plot the total number of nodes (x) vs the total events (y)
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
     # Calculate and plot the line of best fit
@@ -40,11 +44,11 @@ def plot_points(input_name, output_name, x, y, x_label = "", y_label = ""):
     plt.savefig(output_name)
 
 # Print a given dataframe from the csv file
-def print_from_csv(input_name):
+def print_from_csv(input_name: str) -> None:
     print(convert_frame(input_name))
 
 # Return a new dataframe with columns "WALL_TIME and GPU_TIME"
-def convert_frame(input_name):
+def convert_frame(input_name: str) -> pd.DataFrame:
     dataframe = pd.read_csv(input_name)
     dataframe = dataframe.set_index("event_id")
 
