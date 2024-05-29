@@ -2,6 +2,7 @@ import os
 import glob
 import yaml
 import graph_generation
+from typing import Tuple
 
 class Plotter():
     """
@@ -15,6 +16,7 @@ class Plotter():
         self.input_dir = ""
         self.input_files = []
         self.command_list = []
+        self.bounds = []
 
     # Parsing methods
 
@@ -71,6 +73,8 @@ class Plotter():
             self.set_output_dir(argument)
         elif command == "--yaml":
             self.parse_yaml(argument)
+        elif command == "--bounds":
+            self.set_bounds(argument)
         elif command == "--help":
             self.print_help()
         else:
@@ -126,6 +130,9 @@ class Plotter():
             self.output_modes.append(mode)
         else:
             raise Exception(f"--output must be followed by one of the following: {self.availible_output_modes}")
+        
+    def set_bounds(self, bounds: float):
+        self.bounds.append(bounds)
 
     """
     Prints the command line help output.
@@ -151,6 +158,21 @@ class Plotter():
         print(f"-------------- {path} --------------\n")
         graph_generation.print_from_csv(path)
         print("\n")
+
+    def calculate_bounds(self):
+        """
+        Uses the list of bounds to get a list of 2 tuples for bounds
+        """
+        if len(self.bounds) == 0:
+            return None
+        elif len(self.bounds) == 1:
+            return [None, (0, self.bounds[0])]
+        elif len(self.bounds) == 2:
+            return [(0, self.bounds[0]), (0, self.bounds[1])]
+        elif len(self.bounds) == 3:
+            raise Exception("3 Bounds only is not supported.")
+        elif len(self.bounds) == 4:
+            return [(self.bounds[0], self.bounds[1]), (self.bounds[2], self.bounds[3])]
         
     """
     Saves the graph of one given csv to a png file
@@ -159,13 +181,15 @@ class Plotter():
         base_name = os.path.basename(path)
         file_name = self.output_dir + "".join(base_name.split(".")[:-1])
 
+        bounds = self.calculate_bounds()
+
         points_name =  file_name + "_points.png"
         print(f"Saved {path} to image file {points_name}")
-        graph_generation.plot_points(path, points_name, "num_nodes", "total_event", "Number of nodes", "Total time (s)")
+        graph_generation.plot_points(path, points_name, "num_nodes", "total_event", "Number of nodes", "Total time (s)", bounds[0], bounds[1])
 
         edges_name =  file_name + "_edges.png"
         print(f"Saved {path} to image file {edges_name}")
-        graph_generation.plot_points(path, edges_name, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)")
+        graph_generation.plot_points(path, edges_name, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)", bounds[0], bounds[1])
 
     """
     Saves the graph of one given csv to an excel file
