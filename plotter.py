@@ -17,6 +17,7 @@ class Plotter():
         self.input_files = []
         self.command_list = []
         self.bounds = []
+        self.regexes = []
 
     # Parsing methods
 
@@ -75,6 +76,8 @@ class Plotter():
             self.parse_yaml(argument)
         elif command == "--bounds":
             self.set_bounds(argument)
+        elif command == "--regex":
+            self.add_regex(argument)
         elif command == "--help":
             self.print_help()
         else:
@@ -134,6 +137,16 @@ class Plotter():
     def set_bounds(self, bounds: float):
         self.bounds.append(bounds)
 
+    def add_regex(self, regex: str):
+        regx = regex.split("=")[0].strip()
+        command = regex.split("=")[1].strip()
+        command_name = "--" + command.split("(")[0].strip()
+        command_parameter = (command.split("(")[1]).split(")")[0].strip()
+        if command_parameter.isnumeric():
+            command_parameter = float(command_parameter)
+        self.regexes.append([regx, command_name, command_parameter])
+        
+
     """
     Prints the command line help output.
     """
@@ -173,6 +186,12 @@ class Plotter():
             raise Exception("3 Bounds only is not supported.")
         elif len(self.bounds) == 4:
             return [(self.bounds[0], self.bounds[1]), (self.bounds[2], self.bounds[3])]
+        
+    def check_regexes(self, name):
+        for regex in self.regexes:
+            if regex[0] in name:
+                return True
+        return False
         
     """
     Saves the graph of one given csv to a png file
@@ -218,20 +237,32 @@ class Plotter():
                     raise Exception(f"Cannot infer an action for file {entry}")
         self.command_list.clear()
 
+    def process_file(self, file):
+        for mode in self.output_modes:
+            if mode == "print":
+                self.print_output(file)
+            elif mode == "excel":
+                self.save_to_excel(file)
+            elif mode == "png":
+                self.save_to_png(file)
+
     """
     Processes all the files in the file queue according to the current output mode
     """
     def process_file_queue(self):
         if len(self.output_modes) == 0:
             self.output_modes.append("print")
-        for file in self.input_files:
-            for mode in self.output_modes:
-                if mode == "print":
-                    self.print_output(file)
-                elif mode == "excel":
-                    self.save_to_excel(file)
-                elif mode == "png":
-                    self.save_to_png(file)
+        for file in self.input_files.copy():
+            if not self.check_regexes(file):
+                self.process_file(file)
+                self.input_files.remove(file)
+        for regex in self.regexes:
+            self.execute_command(regex[1], regex[2])
+            for file in self.input_files.copy():
+                if regex[0] in file:
+                    self.process_file(file)
+                    self.input_files.remove(file)    
+
         self.input_files.clear()
 
     """

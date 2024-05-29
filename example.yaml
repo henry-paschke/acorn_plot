@@ -6,6 +6,8 @@ outdir: output/
 bounds:
   - 3
 
-file:
-  - csv/05_28_10cpu_base_GNN169_ml.csv
+dir: csv
 
+regex: 
+  - gpu=bounds(3.0)
+  - cpu=bounds(10.0)
