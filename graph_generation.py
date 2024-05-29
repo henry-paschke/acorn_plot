@@ -23,13 +23,15 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
  
     figure, axes = plt.subplots(figsize=(6,6))
 
+    # # Declare axies bounds
+    if x_bounds is not None:
+        axes.set_xlim(x_bounds)
+    if y_bounds is not None:
+        axes.set_ylim(y_bounds)
+
     # Declare axis labels
     axes.set_xlabel(x_label)
     axes.set_ylabel(y_label)
-
-    # Declare axies bounds
-    axes.set_xlim(x_bounds)
-    axes.set_ylim(y_bounds)
 
     # Plot the total number of nodes (x) vs the total events (y)
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
