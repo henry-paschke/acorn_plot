@@ -135,7 +135,7 @@ class Plotter():
             raise Exception(f"--output must be followed by one of the following: {self.availible_output_modes}")
         
     def set_bounds(self, bounds: float):
-        self.bounds.append(bounds)
+        self.bounds.append(float(bounds))
 
     def add_regex(self, regex: str):
         regx = regex.split("=")[0].strip()
