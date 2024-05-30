@@ -181,7 +181,7 @@ class Plotter():
         elif len(self.bounds) == 1:
             return [None, (0, self.bounds[0])]
         elif len(self.bounds) == 2:
-            return [(0, self.bounds[0]), (0, self.bounds[1])]
+            return [None, (self.bounds[0], self.bounds[1])]
         elif len(self.bounds) == 3:
             raise Exception("3 Bounds only is not supported.")
         elif len(self.bounds) == 4:
