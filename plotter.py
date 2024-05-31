@@ -251,22 +251,19 @@ class Plotter():
             entry = self.command_list.copy()[i]
             if isinstance(entry, list):
                 if entry[0] == "--yaml":
-                    yaml_file = entry[0]
+                    yaml_file = entry[1]
                 else:
                     continue
             elif entry.endswith(".yaml"):
                 yaml_file = entry
             self.command_list[i: i+1] = self.parse_yaml(yaml_file)
             
-
         for entry in self.command_list:
             if isinstance(entry, list):
                 self.execute_command(entry[0], entry[1])
             else:
                 if entry.endswith(".csv"):
                     self.execute_command("--file", entry)
-                elif entry.endswith(".yaml"):
-                    self.execute_command("--yaml", entry)
                 else:
                     raise Exception(f"Cannot infer an action for file {entry}")
         self.command_list.clear()
