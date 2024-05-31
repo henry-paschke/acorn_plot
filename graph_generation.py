@@ -8,7 +8,7 @@ def csv_to_excel(input_name: str, output_name: str) -> None:
     convert_frame(input_name).to_excel(output_name)
 
 # Plot a given csv file to an output file
-def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = [0,5], y_bounds: list = [0,5]) -> None:
+def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = None, y_bounds: list = None) -> None:
 
     # Rows to drop from the dataframe
     drop_labels = ["mean", "std"]

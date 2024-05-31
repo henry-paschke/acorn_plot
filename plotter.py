@@ -8,7 +8,7 @@ class Plotter():
     """
     A graph plotting command system for command line interface or direct use in a script.
     """
-    availible_output_modes = ["excel", "print", "png"]
+    availible_output_modes = ["excel", "print", "png", "png_evn"]
 
     def __init__(self):
         self.output_modes = []
@@ -31,7 +31,9 @@ class Plotter():
                 next_arg_skipped = False
                 continue
             argument = args[i]
-            if argument.startswith("--"):
+            if argument == "--help":
+                self.command_list.append([argument, None])
+            elif argument.startswith("--"):
                 if i + 1 > len(args):
                     raise Exception(f"Option {argument} must be followed by an argument.")
                 else:
@@ -71,6 +73,9 @@ class Plotter():
         elif command == "--indir":
             self.set_input_dir(argument)
         elif command == "--outdir":
+            self.set_output_dir(argument)
+        elif command == "--alldir":
+            self.add_directory(argument)
             self.set_output_dir(argument)
         elif command == "--yaml":
             self.parse_yaml(argument)
@@ -131,6 +136,8 @@ class Plotter():
     def set_output_mode(self, mode: str):
         if mode in self.availible_output_modes:
             self.output_modes.append(mode)
+        elif mode == "all":
+            self.output_modes = self.availible_output_modes
         else:
             raise Exception(f"--output must be followed by one of the following: {self.availible_output_modes}")
         
@@ -159,6 +166,10 @@ class Plotter():
         --output <output_mode>  choose between printed, excel, and png output
         --indir <dir>           sets the input directory
         --outdir <dir>          sets the output directory
+        --alldir <dir>          sets the base folder where all files exist and will be created
+        --yaml <yaml_file_path> loads a yaml configuration and overrides existing settings according to its system
+        --bounds <x>            sets the y bounds from 0 to x. Using twice will set the y lower and upper (Will be refactored in the future to use tuple)
+        --regex <regex>         sets a regex, where regex is <file_name_regex = function_to_use( argument )>
         --help                  see this page again
             """)
 
@@ -177,7 +188,7 @@ class Plotter():
         Uses the list of bounds to get a list of 2 tuples for bounds
         """
         if len(self.bounds) == 0:
-            return None
+            return [None, None]
         elif len(self.bounds) == 1:
             return [None, (0, self.bounds[0])]
         elif len(self.bounds) == 2:
@@ -209,6 +220,16 @@ class Plotter():
         edges_name =  file_name + "_edges.png"
         print(f"Saved {path} to image file {edges_name}")
         graph_generation.plot_points(path, edges_name, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)", bounds[0], bounds[1])
+
+    def save_to_png_evn(self, path: str):
+        base_name = os.path.basename(path)
+        file_name = self.output_dir + "".join(base_name.split(".")[:-1])
+
+        bounds = self.calculate_bounds()
+        name =  file_name + "_edges_vs_nodes.png"
+        print(f"Saved {path} to image file {name}")
+        graph_generation.plot_points(path, name, "num_nodes", "7_num_edges_bg", "Number of nodes", "Number of edges", bounds[0], bounds[1])
+
 
     """
     Saves the graph of one given csv to an excel file
@@ -245,6 +266,8 @@ class Plotter():
                 self.save_to_excel(file)
             elif mode == "png":
                 self.save_to_png(file)
+            elif mode == "png_evn":
+                self.save_to_png_evn(file)
 
     """
     Processes all the files in the file queue according to the current output mode
