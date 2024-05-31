@@ -48,15 +48,17 @@ class Plotter():
     """
     Parses a yaml file and adds its commands to the command queue.
     """
-    def parse_yaml(self, yaml_path: str):
+    def parse_yaml(self, yaml_path: str) -> list:
+        l = []
         with open(yaml_path, 'r') as file:
             data = yaml.safe_load(file)
             for key, value in data.items():
                 if isinstance(value, list):
                     for entry in value:
-                        self.command_list.append(["--" + key, entry])
+                        l.append(["--" + key, entry])
                 else:
-                    self.command_list.append(["--" + key, value])
+                    l.append(["--" + key, value])
+        return l
 
     # Command runner for text commands
 
@@ -77,8 +79,6 @@ class Plotter():
         elif command == "--alldir":
             self.add_directory(argument)
             self.set_output_dir(argument)
-        elif command == "--yaml":
-            self.parse_yaml(argument)
         elif command == "--bounds":
             self.set_bounds(argument)
         elif command == "--regex":
@@ -246,6 +246,19 @@ class Plotter():
     Runs all the commands in the command queue
     """
     def run_command_queue(self):
+        for i in range(len(self.command_list)):
+            yaml_file = None
+            entry = self.command_list.copy()[i]
+            if isinstance(entry, list):
+                if entry[0] == "--yaml":
+                    yaml_file = entry[0]
+                else:
+                    continue
+            elif entry.endswith(".yaml"):
+                yaml_file = entry
+            self.command_list[i: i+1] = self.parse_yaml(yaml_file)
+            
+
         for entry in self.command_list:
             if isinstance(entry, list):
                 self.execute_command(entry[0], entry[1])
