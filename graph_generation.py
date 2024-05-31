@@ -2,10 +2,15 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
+from scipy.optimize import curve_fit
+import numpy as np
 
 # Convert a given csv file into an excel file with columns "WALL_TIME and GPU_TIME"
 def csv_to_excel(input_name: str, output_name: str) -> None:
     convert_frame(input_name).to_excel(output_name)
+
+def quad_func(x, a, b, c):
+    return a * x**2 + b * x + c
 
 # Plot a given csv file to an output file
 def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = None, y_bounds: list = None) -> None:
@@ -35,10 +40,18 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
 
     # Plot the total number of nodes (x) vs the total events (y)
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
-    # Calculate and plot the line of best fit
+
+    # Calculate and plot the line of best fit using scipy
+    popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
+    x_fit = np.linspace(min(dataframe[x]), max(dataframe[x]), 100)
+    y_fit = quad_func(x_fit, *popt)
+    a, b, c = popt
+    axes.text(0.5, 0.95, f"Model: {round(a,6)}x^2 + {round(b,6)}x + {round(c,6)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+    axes.plot(x_fit, y_fit,c='orange')
+
+    # Find the linear slope
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
-    axes.text(0.5, 0.95, f"Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
-    axes.plot(dataframe[x], line_of_best_fit.slope * dataframe[x] + line_of_best_fit.intercept,c='orange')
+    axes.text(0.5, 0.9, f"Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
 
     plt.xticks(rotation = 45)
     plt.tight_layout()
