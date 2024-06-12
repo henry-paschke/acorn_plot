@@ -5,6 +5,7 @@ from scipy import stats
 from scipy.optimize import curve_fit
 import numpy as np
 
+
 # Convert a given csv file into an excel file with columns "WALL_TIME and GPU_TIME"
 def csv_to_excel(input_name: str, output_name: str) -> None:
     convert_frame(input_name).to_excel(output_name)
@@ -13,7 +14,7 @@ def quad_func(x, a, b, c):
     return a * x**2 + b * x + c
 
 # Plot a given csv file to an output file
-def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = None, y_bounds: list = None) -> None:
+def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = None, y_bounds: list = None, curve_type ="q") -> None:
 
     # Rows to drop from the dataframe
     drop_labels = ["mean", "std"]
@@ -42,16 +43,22 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
 
     # Calculate and plot the line of best fit using scipy
-    popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
-    x_fit = np.linspace(min(dataframe[x]), max(dataframe[x]), 100)
-    y_fit = quad_func(x_fit, *popt)
-    a, b, c = popt
-    axes.text(0.5, 0.95, f"Model: {round(a,6)}x^2 + {round(b,6)}x + {round(c,6)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
-    axes.plot(x_fit, y_fit,c='orange')
-
+    if curve_type == "q":
+        popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
+        x_fit = np.linspace(min(dataframe[x]), max(dataframe[x]), 100)
+        y_fit = quad_func(x_fit, *popt)
+        a, b, c = popt
+        axes.text(0.5, 0.95, f"Model: {round(a,6)}x^2 + {round(b,6)}x + {round(c,6)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+        axes.plot(x_fit, y_fit,c='orange')
     # Find the linear slope
-    line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
-    axes.text(0.5, 0.9, f"Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+    elif curve_type == "l":
+        line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
+        slope = line_of_best_fit.slope
+        intercept = line_of_best_fit.intercept
+        axes.text(0.5, 0.9, f"Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+        axes.plot(dataframe[x], slope * dataframe[x] + intercept,c='orange')
+    else:
+        raise ValueError("Incorrect curve type given ...")
 
     plt.xticks(rotation = 45)
     plt.tight_layout()
