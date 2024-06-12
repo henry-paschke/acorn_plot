@@ -44,9 +44,9 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
 
     popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
     a, b, c = popt
-    axes.text(0.5, 0.95, f"Model: {round(a,6)}x^2 + {round(b,6)}x + {round(c,6)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+    axes.text(0.5, 0.95, f"Quadratic Model: {round(a,6)}x^2 + {round(b,6)}x + {round(c,6)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
-    axes.text(0.5, 0.9, f"Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+    axes.text(0.5, 0.9, f"Linear Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
 
     # Calculate and plot the line of best fit using scipy
     if curve_type == "q":
