@@ -42,18 +42,19 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     # Plot the total number of nodes (x) vs the total events (y)
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
 
+    # Add the quadratic equation and linear slope text
     popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
     a, b, c = popt
     axes.text(0.5, 0.95, f"Quadratic Model: {round(a,6)}x^2 + {round(b,6)}x + {round(c,6)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
     axes.text(0.5, 0.9, f"Linear Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
 
-    # Calculate and plot the line of best fit using scipy
+    # Calculate and plot the quadratic line of best fit using scipy
     if curve_type == "q":
         x_fit = np.linspace(min(dataframe[x]), max(dataframe[x]), 100)
         y_fit = quad_func(x_fit, *popt)
         axes.plot(x_fit, y_fit,c='orange')
-    # Find the linear slope
+    # Calculate and plot the linear slope using stats
     elif curve_type == "l":
         axes.plot(dataframe[x], line_of_best_fit.slope * dataframe[x] + line_of_best_fit.intercept, c='orange')
     else:
