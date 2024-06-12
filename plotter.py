@@ -213,22 +213,30 @@ class Plotter():
 
         bounds = self.calculate_bounds()
 
-        points_name =  file_name + "_points.png"
-        print(f"Saved {path} to image file {points_name}")
-        graph_generation.plot_points(path, points_name, "num_nodes", "total_event", "Number of nodes", "Total time (s)", bounds[0], bounds[1])
+        points_name =  file_name + "_points"
+        for type in ["q", "l"]:
+            graph_generation.plot_points(path, points_name + "_" + type, "num_nodes", "total_event", "Number of nodes", "Total time (s)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {points_name}_{type}.png")
+            graph_generation.plot_points(path, points_name + "_" + type, "num_nodes", "total_event", "Number of nodes", "Total time (s)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {points_name}_{type}.png")
 
-        edges_name =  file_name + "_edges.png"
-        print(f"Saved {path} to image file {edges_name}")
-        graph_generation.plot_points(path, edges_name, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)", bounds[0], bounds[1])
+        edges_name =  file_name + "_edges"
+        for type in ["q", "l"]:
+            graph_generation.plot_points(path, edges_name + "_" + type, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {edges_name}_{type}.png")
+            graph_generation.plot_points(path, edges_name + "_" + type, "7_num_edges_bg", "total_event", "Number of edges", "Total time (s)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {edges_name}_{type}.png")
 
     def save_to_png_evn(self, path: str):
         base_name = os.path.basename(path)
         file_name = self.output_dir + "".join(base_name.split(".")[:-1])
 
         bounds = self.calculate_bounds()
-        name =  file_name + "_edges_vs_nodes.png"
-        print(f"Saved {path} to image file {name}")
-        graph_generation.plot_points(path, name, "num_nodes", "7_num_edges_bg", "Number of nodes", "Number of edges", bounds[0], bounds[1])
+        name =  file_name + "_edges_vs_nodes"
+        for type in ["q", "l"]:
+            graph_generation.plot_points(path, name + "_" + type, "num_nodes", "7_num_edges_bg", "Number of nodes", "Number of edges", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {name}_{type}.png")
+
 
 
     """
