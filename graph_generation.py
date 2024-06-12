@@ -48,9 +48,9 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     a_str = f"{round(a,12)}x^2 + " if abs(a) > 0.000000000001 else ""
     b_str = f"{round(b,12)}x + " if abs(b) > 0.000000000001  else ""
     c_str = f"{round(c,12)}"
-    axes.text(0.5, 0.95, f"Quadratic Model: {a_str}{b_str}{c_str}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+    axes.text(0.5, 0.95, f"Quadratic Model: {a_str}{b_str}{c_str}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes, fontsize='x-small')
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
-    axes.text(0.5, 0.9, f"Linear Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
+    axes.text(0.5, 0.9, f"Linear Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes, fontsize='x-small')
 
     # Calculate and plot the quadratic line of best fit using scipy
     if curve_type == "q":
