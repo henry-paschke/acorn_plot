@@ -42,23 +42,24 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     # Plot the total number of nodes (x) vs the total events (y)
     axes.scatter(dataframe[x], dataframe[y], alpha=0.3)
 
-    # Add the quadratic equation and linear slope text
-    popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
-    a, b, c = popt
-    a_str = f"{round(a,12)}x^2 + " if abs(a) > 0.000000000001 else ""
-    b_str = f"{round(b,12)}x + " if abs(b) > 0.000000000001  else ""
-    c_str = f"{round(c,12)}"
-    axes.text(0.5, 0.95, f"Quadratic Model: {a_str}{b_str}{c_str}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes, fontsize='x-small')
+    # Add linear slope text
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
     axes.text(0.5, 0.9, f"Linear Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes, fontsize='x-small')
 
     # Calculate and plot the quadratic line of best fit using scipy
     if curve_type == "q":
+        popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
+        a, b, c = popt
+        a_str = f"{round(a,12)}x^2 + " if abs(a) > 0.000000000001 else ""
+        b_str = f"{round(b,12)}x + " if abs(b) > 0.000000000001  else ""
+        c_str = f"{round(c,12)}"
+        axes.text(0.5, 0.95, f"Quadratic Model: {a_str}{b_str}{c_str}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes, fontsize='x-small')
         x_fit = np.linspace(min(dataframe[x]), max(dataframe[x]), 100)
         y_fit = quad_func(x_fit, *popt)
         axes.plot(x_fit, y_fit,c='orange')
     # Calculate and plot the linear slope using stats
     elif curve_type == "l":
+        axes.text(0.5, 0.95, f"Linear Model: {round(line_of_best_fit.slope,12)}x + {round(line_of_best_fit.intercept,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes, fontsize='x-small')
         axes.plot(dataframe[x], line_of_best_fit.slope * dataframe[x] + line_of_best_fit.intercept, c='orange')
     else:
         raise ValueError("Incorrect curve type given ...")
