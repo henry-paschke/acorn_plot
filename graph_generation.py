@@ -45,9 +45,9 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     # Add the quadratic equation and linear slope text
     popt, pcov = curve_fit(quad_func, dataframe[x], dataframe[y])
     a, b, c = popt
-    a_str = f"{round(a,6)}x^2 + " if abs(a) < 0.00001 else ""
-    b_str = f"{round(b,6)}x + " if abs(b) < 0.00001  else ""
-    c_str = f"{round(c,6)}" if abs(c) < 0.00001  else ""
+    a_str = f"{round(a,6)}x^2 + " if abs(a) > 0.00001 else ""
+    b_str = f"{round(b,6)}x + " if abs(b) > 0.00001  else ""
+    c_str = f"{round(c,6)}"
     axes.text(0.5, 0.95, f"Quadratic Model: {a_str}{b_str}{c_str}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
     line_of_best_fit = stats.linregress(dataframe[x], dataframe[y])
     axes.text(0.5, 0.9, f"Linear Slope: {round(line_of_best_fit.slope,12)}", horizontalalignment='center', verticalalignment='center', transform=axes.transAxes)
