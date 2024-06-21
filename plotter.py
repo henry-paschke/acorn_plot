@@ -138,6 +138,7 @@ class Plotter():
             self.output_modes.append(mode)
         elif mode == "all":
             self.output_modes = self.availible_output_modes
+            self.output_modes.remove("png_mem")
         else:
             raise Exception(f"--output must be followed by one of the following: {self.availible_output_modes}")
         
