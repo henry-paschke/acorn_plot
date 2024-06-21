@@ -74,6 +74,10 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
 def print_from_csv(input_name: str) -> None:
     print(convert_frame(input_name))
 
+# Given a path to a csv, return a constructed pandas dataframe
+def csv_to_dataframe(input_name:str) -> pd.DataFrame:
+    return pd.read_csv(input_name)
+
 # Return a new dataframe with columns "WALL_TIME and GPU_TIME"
 def convert_frame(input_name: str) -> pd.DataFrame:
     dataframe = pd.read_csv(input_name)
