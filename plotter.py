@@ -8,7 +8,7 @@ class Plotter():
     """
     A graph plotting command system for command line interface or direct use in a script.
     """
-    availible_output_modes = ["excel", "print", "png", "png_evn"]
+    availible_output_modes = ["excel", "print", "png", "png_evn", "png_mem"]
 
     def __init__(self):
         self.output_modes = []
@@ -208,6 +208,9 @@ class Plotter():
     Saves the graph of one given csv to a png file
     """
     def save_to_png(self, path: str) -> None:
+        if "memory" in path:
+            self.save_to_png_mem(path)
+            pass
         base_name = os.path.basename(path)
         file_name = self.output_dir + "".join(base_name.split(".")[:-1])
 
@@ -236,6 +239,26 @@ class Plotter():
         for type in ["q", "l"]:
             graph_generation.plot_points(path, name + "_" + type, "num_nodes", "7_num_edges_bg", "Number of nodes", "Number of edges", bounds[0], bounds[1], type)
             print(f"Saved {path} to image file {name}_{type}.png")
+
+    def save_to_png_mem(self, path: str):
+        base_name = os.path.basename(path)
+        file_name = self.output_dir + "".join(base_name.split(".")[:-1])
+
+        bounds = self.calculate_bounds()
+
+        nodes_name =  file_name + "_mem_vs_nodes"
+        for type in ["q", "l"]:
+            graph_generation.plot_points(path, nodes_name + "_" + type, "num_nodes", "peak_memory", "Number of nodes", "Peak memory (GB)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {nodes_name}_{type}.png")
+            graph_generation.plot_points(path, nodes_name + "_" + type, "num_nodes", "peak_memory", "Number of nodes", "Peak memory (GB)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {nodes_name}_{type}.png")
+
+        edges_name =  file_name + "_mem_vs_edges"
+        for type in ["q", "l"]:
+            graph_generation.plot_points(path, edges_name + "_" + type, "num_edges_bg", "peak_memory", "Number of edges", "Peak memory (GB)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {edges_name}_{type}.png")
+            graph_generation.plot_points(path, edges_name + "_" + type, "num_edges_bg", "peak_memory", "Number of edges", "Peak memory (GB)", bounds[0], bounds[1], type)
+            print(f"Saved {path} to image file {edges_name}_{type}.png")
 
 
 
@@ -286,6 +309,8 @@ class Plotter():
                 self.save_to_png(file)
             elif mode == "png_evn":
                 self.save_to_png_evn(file)
+            elif mode == "png_mem":
+                self.save_to_png_mem(file)
 
     """
     Processes all the files in the file queue according to the current output mode
