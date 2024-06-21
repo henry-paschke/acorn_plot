@@ -1,0 +1,7 @@
+output: 
+  - png_evn
+
+outdir: /global/homes/j/jamesgab/acorns_yml/CTD_2023/hydra/saved_outputs/2024-06-12-10-40-43/
+  
+file: /global/homes/j/jamesgab/acorns_yml/CTD_2023/hydra/saved_outputs/2024-06-12-10-40-43/06_12_gpu_1000both_1695_78_ml.csv
+

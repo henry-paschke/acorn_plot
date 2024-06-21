@@ -7,15 +7,17 @@ import numpy as np
 
 
 # Convert a given csv file into an excel file with columns "WALL_TIME and GPU_TIME"
-def csv_to_excel(input_name: str, output_name: str) -> None:
-    convert_frame(input_name).to_excel(output_name)
+def csv_to_excel(input_name: str, output_name: str, convert = True) -> None:
+    if convert:
+        convert_frame(input_name).to_excel(output_name)
+    else:
+        pd.read_csv(input_name).to_excel(output_name)
 
 def quad_func(x, a, b, c):
     return a * x**2 + b * x + c
 
 # Plot a given csv file to an output file
 def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str = "", y_label: str = "", x_bounds: list = None, y_bounds: list = None, curve_type ="q") -> None:
-
     # Rows to drop from the dataframe
     drop_labels = ["mean", "std"]
 
@@ -25,7 +27,10 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     # Drop the desired rows using the list as reference
     dataframe = dataframe.set_index("event_id")
     for drop_label in drop_labels:
-        dataframe.drop(drop_label, inplace=True)
+        try:
+            dataframe.drop(drop_label, inplace=True)
+        except:
+            pass
  
     figure, axes = plt.subplots(figsize=(6,6))
 
@@ -71,8 +76,11 @@ def plot_points(input_name: str, output_name: str, x: str, y: str, x_label: str 
     plt.savefig(output_name)
 
 # Print a given dataframe from the csv file
-def print_from_csv(input_name: str) -> None:
-    print(convert_frame(input_name))
+def print_from_csv(input_name: str, convert = True) -> None:
+    if convert:
+        print(convert_frame(input_name))
+    else:
+        print(pd.read_csv(input_name))
 
 # Given a path to a csv, return a constructed pandas dataframe
 def csv_to_dataframe(input_name:str) -> pd.DataFrame:

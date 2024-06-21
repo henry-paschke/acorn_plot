@@ -181,7 +181,7 @@ class Plotter():
     """
     def print_output(self, path: str) -> None:
         print(f"-------------- {path} --------------\n")
-        graph_generation.print_from_csv(path)
+        graph_generation.print_from_csv(path, not "memory" in path)
         print("\n")
 
     def calculate_bounds(self):
@@ -211,7 +211,8 @@ class Plotter():
     def save_to_png(self, path: str) -> None:
         if "memory" in path:
             self.save_to_png_mem(path)
-            pass
+            return
+        
         base_name = os.path.basename(path)
         file_name = self.output_dir + "".join(base_name.split(".")[:-1])
 
@@ -232,6 +233,8 @@ class Plotter():
             print(f"Saved {path} to image file {edges_name}_{type}.png")
 
     def save_to_png_evn(self, path: str):
+        if "memory" in path:
+            return
         base_name = os.path.basename(path)
         file_name = self.output_dir + "".join(base_name.split(".")[:-1])
 
@@ -270,7 +273,9 @@ class Plotter():
         base_name = os.path.basename(path)
         file_name = self.output_dir + "".join(base_name.split(".")[:-1]) + ".xlsx"
         print(f"Saved {path} to excel file {file_name}")
-        graph_generation.csv_to_excel(path, file_name)
+
+        print(path, not "memory" in path)
+        graph_generation.csv_to_excel(path, file_name, not "memory" in path)
 
     # Processing methods
 
